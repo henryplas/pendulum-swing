@@ -13,7 +13,7 @@ This follows ideas from *Underactuated Robotics (MIT), “Dynamic Programming 3�
 ```
 .
 ├── pendulum_env.py        # environment: CT dynamics, RK4, linearization, ZOH, GIF export
-├── dp_tool.py             # grid value iteration + barycentric interpolation (A→C diagonal)
+├── dp_tool.py             # grid value iteration + barycentric interpolation
 ├── run_pendulum.py        # trains DP, simulates, LQR handoff, writes outputs/pendulum_swing.gif
 ├── external/
 │   └── msdcontrol/        # (git submodule) LQR implementation; installable as a package
@@ -91,9 +91,9 @@ Start with `49×37×11` for quick tests, then refine.
 ## How this maps to the “Dynamic Programming 3” lecture
 
 - **Function approximation:** A state grid with **barycentric interpolation** is a **linear** approximator in the stored $.  
-- **Discounting:** A small \(\gamma<1\) keeps Bellman targets bounded while fitting (note: this slightly changes the optimal controller; acceptable here because LQR handles the local regime precisely).  
-- **Action handling:** For clarity we sample a modest set of torques in the backup. A common extension is to avoid action grids by computing a **closed-form greedy** \(u^*(x) = -R^{-1} f_2(x)^\top \nabla_x \hat J(x)\) in control-affine systems.  
-- **LQR near equilibrium:** Linearize about the upright (\(\phi=\theta-\pi\)), discretize (ZOH), and call **DLQR** to obtain \(K\). Handoff occurs when \(|\phi|<0.2\) and \(|\dot\phi|<1.0\) (tunable).
+- **Discounting:** A small $\(\gamma<1\)% keeps Bellman targets bounded while fitting (note: this slightly changes the optimal controller; acceptable here because LQR handles the local regime precisely).  
+- **Action handling:** For clarity we sample a modest set of torques in the backup. A common extension is to avoid action grids by computing a **closed-form greedy** $\(u^*(x) = -R^{-1} f_2(x)^\top \nabla_x \hat J(x)\)$ in control-affine systems.  
+- **LQR near equilibrium:** Linearize about the upright $(\(\phi=\theta-\pi\))$, discretize (ZOH), and call **DLQR** to obtain $\(K\)$. Handoff occurs when $\(|\phi|<0.2\)$ and $\(|\dot\phi|<1.0\)$ (tunable).
 
 ---
 
@@ -112,7 +112,7 @@ gif_path = env.save_gif(
 ```
 
 Requirements: `pillow` installed, and the `outputs/` directory (auto-created).  
-Coordinates are rendered as \(x=L\sin\theta,\ y=-L\cos\theta\), so angle wrapping is smooth.
+Coordinates are rendered as $\(x=L\sin\theta,\ y=-L\cos\theta\)$, so angle wrapping is smooth.
 
 ---
 
@@ -149,7 +149,7 @@ There is a SciPy fallback in `run_pendulum.py` if the submodule isn’t importab
 
 ## Notes & extensions
 
-- Replace action sampling with **closed-form greedy** \(u^*(x)\) for control-affine dynamics to remove the action grid.  
+- Replace action sampling with **closed-form greedy** $\(u^*(x)\)$ for control-affine dynamics to remove the action grid.  
 - Swap mesh DP for a tiny **neural fitted VI** (e.g., 64–64–1 MLP) with a slowly updated target network.  
 - Extend to **acrobot**: same scaffolding, larger state; move to on-policy sampling.
 
