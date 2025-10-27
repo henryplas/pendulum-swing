@@ -1,0 +1,13 @@
+LICENSE
+README.md
+pyproject.toml
+msdcontrol/__init__.py
+msdcontrol/env.py
+msdcontrol/lqr.py
+msdcontrol/sim.py
+msdcontrol.egg-info/PKG-INFO
+msdcontrol.egg-info/SOURCES.txt
+msdcontrol.egg-info/dependency_links.txt
+msdcontrol.egg-info/requires.txt
+msdcontrol.egg-info/top_level.txt
+tests/test_lqr.py

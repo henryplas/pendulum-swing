@@ -1,0 +1,7 @@
+numpy>=1.22
+
+[plot]
+matplotlib>=3.6
+
+[zoh]
+scipy>=1.10

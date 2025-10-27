@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "msdcontrol"
+version = "0.1.0"
+description = "LQR and mass–spring–damper optimal control utilities"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Henry Plaskonos" }]
+# If you DON'T have a LICENSE file in the submodule, comment the next line out:
+# license = { file = "LICENSE" }
+
+# Keep deps minimal; SciPy/matplotlib can be optional
+dependencies = ["numpy>=1.22"]
+
+[project.optional-dependencies]
+zoh = ["scipy>=1.10"]
+plot = ["matplotlib>=3.6"]
+
+# 🔑 Tell setuptools to ONLY include the msdcontrol* package
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["msdcontrol*"]
+exclude = ["outputs*", "examples*", "notebooks*", "scripts*", "tests*", "docs*"]
