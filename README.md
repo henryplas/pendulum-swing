@@ -56,7 +56,7 @@ python run_pendulum.py
 
 This will:
 
-1. Run **value iteration** on a coarse grid over \((\theta,\dot\theta)\) and a small set of torques.  
+1. Run **value iteration** on a coarse grid over $(\((\theta,\dot\theta)\))$ and a small set of torques.  
 2. **Simulate** closed-loop: DP policy far from upright to **LQR** near upright.  
 3. Save an **animated GIF** to `outputs/pendulum_swing.gif`.
 
@@ -90,7 +90,7 @@ Start with `49×37×11` for quick tests, then refine.
 
 ## How this maps to the “Dynamic Programming 3” lecture
 
-- **Function approximation:** A state grid with **barycentric interpolation** is a **linear** approximator in the stored vertex values (piecewise-affine \(V\)).  
+- **Function approximation:** A state grid with **barycentric interpolation** is a **linear** approximator in the stored $.  
 - **Discounting:** A small \(\gamma<1\) keeps Bellman targets bounded while fitting (note: this slightly changes the optimal controller; acceptable here because LQR handles the local regime precisely).  
 - **Action handling:** For clarity we sample a modest set of torques in the backup. A common extension is to avoid action grids by computing a **closed-form greedy** \(u^*(x) = -R^{-1} f_2(x)^\top \nabla_x \hat J(x)\) in control-affine systems.  
 - **LQR near equilibrium:** Linearize about the upright (\(\phi=\theta-\pi\)), discretize (ZOH), and call **DLQR** to obtain \(K\). Handoff occurs when \(|\phi|<0.2\) and \(|\dot\phi|<1.0\) (tunable).
