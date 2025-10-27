@@ -1,4 +1,4 @@
-# Pendulum Swing-Up via Dynamic Programming → Balance via LQR
+# Pendulum Swing-Up via Dynamic Programming to Balance via LQR
 
 ![Pendulum swing-up](outputs/pendulum_swing.gif)
 
