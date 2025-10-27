@@ -56,7 +56,7 @@ python run_pendulum.py
 
 This will:
 
-1. Run **value iteration** on a coarse grid over $(\((\theta,\dot\theta)\))$ and a small set of torques.  
+1. Run **value iteration** on a coarse grid over $(\theta,\dot\theta)\$ and a small set of torques.  
 2. **Simulate** closed-loop: DP policy far from upright to **LQR** near upright.  
 3. Save an **animated GIF** to `outputs/pendulum_swing.gif`.
 
