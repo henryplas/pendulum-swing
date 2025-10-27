@@ -3,6 +3,7 @@
 ![Pendulum swing-up](outputs/pendulum_swing.gif)
 
 A minimal, reproducible project that learns a **value function** on a coarse mesh to **swing up** a torque-actuated pendulum, then hands off to **LQR** to **balance** at the upright.  
+
 This follows ideas from *Underactuated Robotics (MIT), “Dynamic Programming 3”*: value iteration with function approximation, **barycentric (simplex) interpolation** for off-grid evaluations, careful use of **discounting**, and an **LQR** stabilizer near equilibrium.
 
 ---
@@ -15,7 +16,7 @@ This follows ideas from *Underactuated Robotics (MIT), “Dynamic Programming 3�
 ├── dp_tool.py             # grid value iteration + barycentric interpolation (A→C diagonal)
 ├── run_pendulum.py        # trains DP, simulates, LQR handoff, writes outputs/pendulum_swing.gif
 ├── external/
-│   └── msdcontrol/        # (git submodule) your LQR implementation; installable as a package
+│   └── msdcontrol/        # (git submodule) LQR implementation; installable as a package
 └── outputs/
     └── pendulum_swing.gif # generated animation (created by run_pendulum.py)
 ```
@@ -37,30 +38,13 @@ pip install scipy
 
 ## Setup
 
-### 1) Make this folder a Git repo (optional, if you haven’t)
-
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-```
-
-### 2) Add the LQR submodule
-
-```bash
-mkdir -p external
-git submodule add -b main https://github.com/henryplas/msd-optimal-control external/msdcontrol
-git commit -m "Add msdcontrol as submodule"
-```
-
-### 3) Make the submodule importable
+### 1) Make the submodule importable
 
 **Recommended (editable install):**
 ```bash
 pip install -e external/msdcontrol
 ```
 
-> If you cannot or do not want to install, `run_pendulum.py` can also path-append `external/msdcontrol` and import `from msdcontrol.lqr import dlqr`.
 
 ---
 
@@ -73,7 +57,7 @@ python run_pendulum.py
 This will:
 
 1. Run **value iteration** on a coarse grid over \((\theta,\dot\theta)\) and a small set of torques.  
-2. **Simulate** closed-loop: DP policy far from upright → **LQR** near upright.  
+2. **Simulate** closed-loop: DP policy far from upright to **LQR** near upright.  
 3. Save an **animated GIF** to `outputs/pendulum_swing.gif`.
 
 ---
@@ -101,7 +85,6 @@ Start with `49×37×11` for quick tests, then refine.
 **Tips**
 - Keep `dt` modest so one step doesn’t jump across many cells.
 - If convergence stalls, slightly increase `gamma` or `max_iters`.
-- For faster convergence, you can convert the DP update to **Gauss–Seidel** (in-place) within `dp_tool.value_iteration`.
 
 ---
 
@@ -133,7 +116,7 @@ Coordinates are rendered as \(x=L\sin\theta,\ y=-L\cos\theta\), so angle wrappin
 
 ---
 
-## Using your LQR
+## Using LQR
 
 This project expects:
 
@@ -149,7 +132,7 @@ There is a SciPy fallback in `run_pendulum.py` if the submodule isn’t importab
 ## Troubleshooting
 
 - **Slow value iteration**  
-  Coarsen the grids/actions (e.g., `49×37×11`), relax `tol`, or reduce `max_iters`. Consider Gauss–Seidel updates.
+  Coarsen the grids/actions (e.g., `49×37×11`), relax `tol`, or reduce `max_iters`. 
 
 - **`ImportError: cannot import dlqr`**  
   Ensure submodule is present and installed:
@@ -158,21 +141,6 @@ There is a SciPy fallback in `run_pendulum.py` if the submodule isn’t importab
   pip install -e external/msdcontrol
   ```
   Or use the path-append fallback at the top of `run_pendulum.py`.
-
-- **Packaging error during `pip install -e external/msdcontrol`** (e.g., “Multiple top-level packages discovered”)  
-  The submodule’s `pyproject.toml` should restrict discovery:
-  ```toml
-  [tool.setuptools.packages.find]
-  where = ["."]
-  include = ["msdcontrol*"]
-  exclude = ["outputs*", "examples*", "notebooks*", "scripts*", "tests*", "docs*"]
-  ```
-
-- **NumPy deprecation**: “Conversion of an array with ndim > 0 to a scalar …”  
-  Extract a scalar with `.item()`:
-  ```python
-  u = -np.dot(K, x_lqr).item()
-  ```
 
 - **No GIF produced**  
   Install `pillow` and check that `outputs/` exists (created automatically).
